@@ -1,3 +1,4 @@
+import hashlib
 import json
 
 from sqlalchemy import Boolean, Enum, String, Integer, Column, DateTime, ForeignKey, Float
@@ -36,9 +37,14 @@ class Product(Base):
     image = Column(String(300),default="https://res.cloudinary.com/dy1unykph/image/upload/v1740037805/apple-iphone-16-pro-natural-titanium_lcnlu2.webp")
     cate_id = Column(Integer, ForeignKey(Category.id), nullable=False)
 
-
-if __name__=="__main__":
-    with app.app_context():
+#
+# if __name__=="__main__":
+#     with app.app_context():
+#         p = "admin"
+#         pw = hashlib.md5(p.encode("utf-8")).hexdigest()
+#         u= User(name="Quan Tri Vien", username="admin", password=pw)
+#         db.session.add(u)
+#         db.session.commit()
         # db.create_all()
         # with open("data/category.json", encoding="utf-8") as f:
         #     cates = json.load(f)
@@ -50,10 +56,10 @@ if __name__=="__main__":
         #     for p in products:
         #         db.session.add(Product(**p))
         #     db.session.commit()
-        with open("data/user.json", encoding="utf-8") as f:
-            users = json.load(f)
-            for u in users:
-                db.session.add(User(**u))
-            db.session.commit()
+        # with open("data/user.json", encoding="utf-8") as f:
+        #     users = json.load(f)
+        #     for u in users:
+        #         db.session.add(User(**u))
+        #     db.session.commit()
 
 

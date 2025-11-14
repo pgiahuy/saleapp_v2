@@ -1,10 +1,11 @@
 import math
-
 from flask import render_template, request
 from werkzeug.utils import redirect
+from flask_login import current_user,login_user,logout_user
+from saleapp import app,login,admin
+import dao
+from saleapp.models import UserRole
 
-from saleapp import app
-import saleapp.dao as dao
 
 @app.route("/")
 def index():
@@ -27,20 +28,37 @@ def common_adtributes():
     }
 
 @app.route("/login",methods=['get','post'])
-def login():
+def login_my_user():
+    if current_user.is_authenticated:
+        return redirect("/")
     err_msg = None
 
     if request.method.__eq__('POST'):
         username = request.form.get('username')
         password = request.form.get('password')
+        user =  dao.auth_user(username, password)
 
-        if username=="user" and password=="123":
-            return redirect('/')
+        if user:
+            login_user(user)
+            if user.user_role == UserRole.ADMIN:
+
+                return redirect("/admin")
+            else:
+                return redirect("/")
         else:
             err_msg ="Username hoac password khong dung!!!"
 
-
     return render_template('login.html',err_msg=err_msg)
+
+@app.route("/logout")
+def logout_my_user():
+    logout_user()
+    return redirect('/login')
+
+
+@login.user_loader
+def get_user(user_id):
+    return dao.get_user_by_id(user_id)
 
 
 if __name__ == "__main__":

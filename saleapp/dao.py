@@ -1,8 +1,8 @@
+import hashlib
 import json
 
 from saleapp import app
-from saleapp.models import Product, Category
-
+from saleapp.models import Product, Category, User
 
 
 def load_categories():
@@ -27,3 +27,11 @@ def get_product_byId(id):
 
 def count_products():
     return Product.query.count()
+
+def auth_user(username,password):
+    password = hashlib.md5(password.encode("utf-8")).hexdigest()
+    return User.query.filter(User.username.__eq__(username), User.password.__eq__(password)).first()
+
+def get_user_by_id(user_id):
+    return User.query.get(user_id)
+
