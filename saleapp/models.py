@@ -25,7 +25,7 @@ class Product(Base):
 
 # if __name__=="__main__":
 #     with app.app_context():
-#         # db.create_all()
+#         #db.create_all()
 #         with open("data/category.json", encoding="utf-8") as f:
 #             cates = json.load(f)
 #             for c in cates:
@@ -36,5 +36,5 @@ class Product(Base):
 #             for p in products:
 #                 db.session.add(Product(**p))
 #             db.session.commit()
-#
-#
+
+

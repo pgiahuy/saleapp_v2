@@ -1,6 +1,8 @@
 import math
 
 from flask import render_template, request
+from werkzeug.utils import redirect
+
 from saleapp import app
 import saleapp.dao as dao
 
@@ -24,9 +26,21 @@ def common_adtributes():
         'cates': dao.load_categories()
     }
 
-@app.route("/login")
+@app.route("/login",methods=['get','post'])
 def login():
-    return render_template('login.html')
+    err_msg = None
+
+    if request.method.__eq__('POST'):
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username=="user" and password=="123":
+            return redirect('/')
+        else:
+            err_msg ="Username hoac password khong dung!!!"
+
+
+    return render_template('login.html',err_msg=err_msg)
 
 
 if __name__ == "__main__":

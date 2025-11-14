@@ -2,19 +2,23 @@
 {%block title%}Đăng nhập{%endblock%}
 {%block content%}
 <h2 class="text-info text-center mt-3">TRANG ĐĂNG NHẬP</h2>
-<form>
+
+{% if err_msg%}
+<div class="alert alert-danger">{{err_msg}}</div>
+{%endif%}
+<form method="post">
     <div class="form-floating mb-3 mt-3">
-        <input type="text" class="form-control" id="email" placeholder="Enter email" name="email">
-        <label for="email">Email</label>
+        <input type="text" class="form-control" id="email" placeholder="Enter username" name="username">
+        <label for="email">Enter username</label>
     </div>
 
     <div class="form-floating mt-3 mb-3">
-        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
-        <label for="pwd">Password</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password">
+        <label for="pwd">Enter password</label>
     </div>
 
     <div class="form-floating mt-3 mb-3 text-center">
-        <button class="btn btn-primary ">Đăng nhập</button>
+        <button class="btn btn-primary " type="submit">Đăng nhập</button>
     </div>
 
 </form>
