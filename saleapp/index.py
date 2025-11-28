@@ -2,7 +2,7 @@ import math
 
 import cloudinary
 import cloudinary.uploader
-from flask import render_template, request, session
+from flask import render_template, request, session, jsonify
 from werkzeug.utils import redirect
 from flask_login import current_user,login_user,logout_user
 from saleapp import app,login,admin,db
@@ -123,7 +123,28 @@ def cart():
     }
     return render_template("cart.html")
 
+@app.route("/api/carts")
+def add_to_cart():
 
+    cart = session.get('cart')
+    if not cart:
+        cart ={}
+    id = str(request.json.get('id'))
+
+    if id in cart:
+        cart[id]['quantity']+=1
+    else:
+        cart[id]={
+            "id":id,
+            "name" :request.json.get('name'),
+            "price" :request.json.get('price'),
+            "quantity":1
+        }
+    session['cart']=cart
+
+    return jsonify({
+        "total_quantity":3
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
