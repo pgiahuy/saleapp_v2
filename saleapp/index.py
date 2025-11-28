@@ -1,9 +1,13 @@
 import math
+
+import cloudinary
+import cloudinary.uploader
 from flask import render_template, request
 from werkzeug.utils import redirect
 from flask_login import current_user,login_user,logout_user
-from saleapp import app,login,admin
+from saleapp import app,login,admin,db
 import dao
+from saleapp.decorators import anonymous_required
 from saleapp.models import UserRole
 
 
@@ -28,9 +32,8 @@ def common_adtributes():
     }
 
 @app.route("/login",methods=['get','post'])
+@anonymous_required
 def login_my_user():
-    if current_user.is_authenticated:
-        return redirect("/")
     err_msg = None
 
     if request.method.__eq__('POST'):
@@ -50,6 +53,48 @@ def login_my_user():
 
     return render_template('login.html',err_msg=err_msg)
 
+@app.route('/admin-login', methods=['post'])
+def admin_login_process():
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    user = dao.auth_user(username, password)
+
+    if user:
+        login_user(user)
+        return redirect('/admin')
+    else:
+        err_msg = "Tài khoản hoặc mật khẩu không đúng!"
+
+
+@app.route("/register",methods=['get','post'])
+def register():
+    err_msg=None
+    if request.method == 'POST':
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+        if password==confirm:
+            username = request.form.get('username')
+            name = request.form.get('name')
+            avatar = request.files.get('avatar')
+            file_path=None
+            if avatar:
+                upload_result = cloudinary.uploader.upload(avatar)
+                file_path = upload_result["secure_url"]
+            try:
+                dao.add_user(name=name, username=username, password=password, avatar=file_path)
+                return redirect("/login")
+            except:
+                db.session.rollback()
+                err_msg = "Lỗi rồi khách ơi!"
+
+
+        else:
+            err_msg="Mật khẩu không khớp!"
+
+    return render_template('register.html', err_msg=err_msg)
+
+
 @app.route("/logout")
 def logout_my_user():
     logout_user()
@@ -59,6 +104,11 @@ def logout_my_user():
 @login.user_loader
 def get_user(user_id):
     return dao.get_user_by_id(user_id)
+
+@app.route("/cart")
+def cart():
+    return render_template("cart.html")
+
 
 
 if __name__ == "__main__":

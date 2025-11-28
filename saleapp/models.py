@@ -1,7 +1,7 @@
 import hashlib
 import json
 
-from sqlalchemy import Boolean, Enum, String, Integer, Column, DateTime, ForeignKey, Float
+from sqlalchemy import Boolean, Enum, String, Integer, Column, DateTime, ForeignKey, Float, Text
 from sqlalchemy.orm import relationship
 from saleapp import db, app
 from datetime import datetime
@@ -36,30 +36,34 @@ class Product(Base):
     price = Column(Float, default=0.0)
     image = Column(String(300),default="https://res.cloudinary.com/dy1unykph/image/upload/v1740037805/apple-iphone-16-pro-natural-titanium_lcnlu2.webp")
     cate_id = Column(Integer, ForeignKey(Category.id), nullable=False)
+    description = Column(Text)
 
+
+if __name__=="__main__":
+    with app.app_context():
+        # p = "123"
+        # pw = hashlib.md5(p.encode("utf-8")).hexdigest()
+        # u= User(name="Gia Huy", username="huy", password=pw)
+        p = "123"
+        pw = hashlib.md5(p.encode("utf-8")).hexdigest()
+        u = User(name="QTV", username="admin", password=pw)
+        db.session.add(u)
+        db.session.commit()
+#         # db.create_all()
+#         with open("data/category.json", encoding="utf-8") as f:
+#             cates = json.load(f)
+#             for c in cates:
+#                 db.session.add(Category(**c))
+#             db.session.commit()
+#         with open("data/product.json", encoding="utf-8") as f:
+#             products = json.load(f)
+#             for p in products:
+#                 db.session.add(Product(**p))
+#             db.session.commit()
+#         # with open("data/user.json", encoding="utf-8") as f:
+#         #     users = json.load(f)
+#         #     for u in users:
+#         #         db.session.add(User(**u))
+#         #     db.session.commit()
 #
-# if __name__=="__main__":
-#     with app.app_context():
-#         p = "admin"
-#         pw = hashlib.md5(p.encode("utf-8")).hexdigest()
-#         u= User(name="Quan Tri Vien", username="admin", password=pw)
-#         db.session.add(u)
-#         db.session.commit()
-        # db.create_all()
-        # with open("data/category.json", encoding="utf-8") as f:
-        #     cates = json.load(f)
-        #     for c in cates:
-        #         db.session.add(Category(**c))
-        #     db.session.commit()
-        # with open("data/product.json", encoding="utf-8") as f:
-        #     products = json.load(f)
-        #     for p in products:
-        #         db.session.add(Product(**p))
-        #     db.session.commit()
-        # with open("data/user.json", encoding="utf-8") as f:
-        #     users = json.load(f)
-        #     for u in users:
-        #         db.session.add(User(**u))
-        #     db.session.commit()
-
 
