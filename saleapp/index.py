@@ -2,7 +2,7 @@ import math
 
 import cloudinary
 import cloudinary.uploader
-from flask import render_template, request
+from flask import render_template, request, session
 from werkzeug.utils import redirect
 from flask_login import current_user,login_user,logout_user
 from saleapp import app,login,admin,db
@@ -107,6 +107,20 @@ def get_user(user_id):
 
 @app.route("/cart")
 def cart():
+    session['cart'] ={
+        '1':{
+            'id':1,
+            'name':'Iphone 19',
+            'price':14000,
+            'quantity':2,
+        },
+        '2':{
+            'id': 2,
+            'name': 'Samsung Galaxy Rphone',
+            'price': 1999000,
+            'quantity': 1,
+        }
+    }
     return render_template("cart.html")
 
 
