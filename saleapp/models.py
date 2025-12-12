@@ -41,29 +41,25 @@ class Product(Base):
 
 if __name__=="__main__":
     with app.app_context():
-        # p = "123"
-        # pw = hashlib.md5(p.encode("utf-8")).hexdigest()
-        # u= User(name="Gia Huy", username="huy", password=pw)
+        db.create_all()
         p = "123"
         pw = hashlib.md5(p.encode("utf-8")).hexdigest()
-        u = User(name="QTV", username="admin", password=pw)
-        db.session.add(u)
+        u1= User(name="Gia Huy", username="huy", password=pw)
+
+        u2 = User(name="QTV", username="admin", password=pw)
+        db.session.add(u1)
+        db.session.add(u2)
         db.session.commit()
-#         # db.create_all()
-#         with open("data/category.json", encoding="utf-8") as f:
-#             cates = json.load(f)
-#             for c in cates:
-#                 db.session.add(Category(**c))
-#             db.session.commit()
-#         with open("data/product.json", encoding="utf-8") as f:
-#             products = json.load(f)
-#             for p in products:
-#                 db.session.add(Product(**p))
-#             db.session.commit()
-#         # with open("data/user.json", encoding="utf-8") as f:
-#         #     users = json.load(f)
-#         #     for u in users:
-#         #         db.session.add(User(**u))
-#         #     db.session.commit()
-#
+
+        with open("data/category.json", encoding="utf-8") as f:
+            cates = json.load(f)
+            for c in cates:
+                db.session.add(Category(**c))
+            db.session.commit()
+        with open("data/product.json", encoding="utf-8") as f:
+            products = json.load(f)
+            for p in products:
+                db.session.add(Product(**p))
+            db.session.commit()
+
 

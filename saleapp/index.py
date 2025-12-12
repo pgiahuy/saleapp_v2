@@ -5,7 +5,7 @@ import cloudinary.uploader
 from flask import render_template, request, session, jsonify
 from werkzeug.utils import redirect
 from flask_login import current_user,login_user,logout_user
-from saleapp import app,login,admin,db
+from saleapp import app, login, admin, db, utils
 import dao
 from saleapp.decorators import anonymous_required
 from saleapp.models import UserRole
@@ -28,7 +28,8 @@ def product_details(id):
 @app.context_processor
 def common_adtributes():
     return {
-        'cates': dao.load_categories()
+        'cates': dao.load_categories(),
+        'stats_cart': utils.count_cart(session.get('cart'))
     }
 
 @app.route("/login",methods=['get','post'])
@@ -107,25 +108,10 @@ def get_user(user_id):
 
 @app.route("/cart")
 def cart():
-    session['cart'] ={
-        '1':{
-            'id':1,
-            'name':'Iphone 19',
-            'price':14000,
-            'quantity':2,
-        },
-        '2':{
-            'id': 2,
-            'name': 'Samsung Galaxy Rphone',
-            'price': 1999000,
-            'quantity': 1,
-        }
-    }
     return render_template("cart.html")
 
-@app.route("/api/carts")
+@app.route("/api/carts",methods=['POST'])
 def add_to_cart():
-
     cart = session.get('cart')
     if not cart:
         cart ={}
@@ -142,9 +128,29 @@ def add_to_cart():
         }
     session['cart']=cart
 
-    return jsonify({
-        "total_quantity":3
-    })
+    print(session['cart'])
+
+    return jsonify(utils.count_cart(cart=cart))
+
+@app.route("/api/carts/<id>", methods=['put'])
+def update_cart(id):
+    cart = session.get('cart')
+
+    if cart and  id in cart:
+        cart[id]["quantity"] = int(request.json.get("quantity"))
+        session['cart'] = cart
+
+    return jsonify(utils.count_cart(cart=cart))
+
+@app.route("/api/carts/<id>", methods=['delete'])
+def delete_cart(id):
+    cart = session.get('cart')
+
+    if cart and id in cart:
+        del cart[id]
+        session['cart'] = cart
+
+    return jsonify(utils.count_cart(cart=cart))
 
 if __name__ == "__main__":
     app.run(debug=True)

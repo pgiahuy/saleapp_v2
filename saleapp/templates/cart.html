@@ -13,21 +13,22 @@
         <th></th>
     </tr>
     {%for p in session['cart'].values()%}
-    <tr>
+    <tr id="product-{{p.id}}" class="product-cart">
         <td>{{p.id}}</td>
         <td>{{p.name}}</td>
-        <td>{{p.price}}</td>
+        <td>{{"{:,.0f}".format(p.price)}}</td>
         <td>
-            <input class="form-control" type="number" value="{{p.quantity}}">
+            <input class="form-control" type="number" value="{{p.quantity}}" onchange="updateCart({{p.id}},this)">
         </td>
         <td>
-            <button class="btn btn-danger">&times;</button>
+            <button class="btn btn-danger" onclick="deleteCart({{p.id}})">&times;</button>
         </td>
     </tr>
     {%endfor%}
 </table>
 <div class="alert alert-info">
-    <h5>Tổng số tiền thanh toán: </h5>
+    <h5>Tổng số sản phẩm: <span class="cart-counter">{{stats_cart.total_quantity}}</span></h5>
+    <h5>Tổng số tiền thanh toán: <span class="cart-amount">{{"{:,.0f}".format(stats_cart.total_amount)}}</span></h5>
 </div>
 <button class="btn btn-success">Thanh toán</button>
 {%else%}

@@ -18,7 +18,7 @@
                 <p class="card-text">{{ "{:,.0f} ₫".format(p.price).replace(",", ".") }} </p>
                 <a href="products/{{p.id}}" class="btn btn-primary">Xem thêm</a>
                 <a href="#" class="btn btn-danger">Đặt hàng</a>
-                <a href="#" class="btn btn-success"><i class="fa-solid fa-cart-plus"></i></a>
+                <a href="javascript:;" class="btn btn-success" onclick="addToCart({{p.id}}, '{{p.name}}', {{p.price}})"><i class="fa-solid fa-cart-plus"></i></a>
             </div>
         </div>
     </div>

@@ -24,11 +24,14 @@
 
                 <a class="nav-link" href="/cart"><i class="fa-solid fa-cart-shopping"></i><span class="badge bg-danger">0</span></a>
                 <a class="nav-link" href="/logout">Đăng xuất <i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+
                 {%else%}
                 <a class="nav-link" href="/login"><i class="fa-regular fa-user"></i> Đăng nhập</a>
                 <a class="nav-link" href="/register">Đăng kí</a>
                 {%endif%}
-
+                <li class="nav-item">
+                    <a class="nav-link active" href="/cart">&#128722;<span class="badge bg-danger cart-counter">{{stats_cart.total_quantity}}</span></a>
+                </li>
             </ul>
             <form class="d-flex" method="get">
                 <input class="form-control me-2" type="text" name="kw" placeholder="Nhap tu khoa">
